@@ -2,6 +2,8 @@ import os
 import sys
 
 
+# Dynamic import:
+# lets us show a friendly install message if dependency is missing.
 def import_dotenv():
 
     try:
@@ -17,6 +19,7 @@ def import_dotenv():
         sys.exit(1)
 
 
+# Load values from .env into environment variables for local/dev runtime.
 def load_configuration():
 
     print("\nORACLE STATUS: Reading the Matrix...")
@@ -25,6 +28,7 @@ def load_configuration():
 
     load_dotenv()
 
+    # Any config entry with None is treated as missing and should block startup
     config = {
         "mode": os.getenv("MATRIX_MODE", "development"),
         "database": os.getenv("DATABASE_URL"),
@@ -36,6 +40,8 @@ def load_configuration():
     return config
 
 
+# Use defaults for non-sensitive settings;
+# required secrets stay None if not set.
 def validate_config(config):
     missing = [k for k, v in config.items() if v is None]
 
@@ -69,6 +75,7 @@ def show_configuration(config):
         print("Zion Network: Offline")
 
 
+# Basic local security check: .env should exist for environment-based secrets.
 def security_check():
     print("\nEnvironment security check:")
 
