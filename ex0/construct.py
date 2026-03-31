@@ -5,6 +5,8 @@ import os
 
 def construct():
     print("Constructing the project...")
+    # Standard venv detection check;
+    # mismatch usually means wrong interpreter selected.
     if sys.prefix != sys.base_prefix:
         print("\nMATRIX STATUS: Welcome to the construct")
         print("\nCurrent Python: ", sys.executable)
@@ -17,6 +19,8 @@ def construct():
         paths = site.getsitepackages()
         if paths:
             print(paths[0])
+    # Global Python detected;
+    # avoid installing project deps here to prevent system-wide conflicts.
     else:
         print("\nMATRIX STATUS: You're still plugged in")
         print("\nCurrent Python: ", sys.executable)
