@@ -13,6 +13,7 @@ def check_dependencies():
 
     for lib in REQUIRED_LIBS:
         try:
+            # Dynamic import keeps dependency checks generic and reusable.
             module = __import__(lib)
             version = getattr(module, "__version__", "unknown")
             modules[lib] = module
@@ -49,14 +50,18 @@ def show_install_instructions(missing):
 
 
 def run_analysis(modules):
+    # Use already-validated imports from check_dependencies.
     pandas = modules["pandas"]
     matplotlib = modules["matplotlib"]
+    # Import pyplot explicitly from matplotlib so plotting APIs are available.
     plt = __import__(f"{matplotlib.__name__}.pyplot", fromlist=["pyplot"])
 
     print("\nAnalyzing Matrix data...")
 
     smooth_y = []
     value = random.uniform(40, 60)
+    # Random walk: each point is a small change from the previous one
+    # (smoother than pure noise).
     for _ in range(1000):
         value += random.uniform(-1.5, 1.5)
         smooth_y.append(value)
